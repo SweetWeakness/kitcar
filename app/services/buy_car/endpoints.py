@@ -10,6 +10,9 @@ router = APIRouter(prefix="/buy_car", tags=["buy_car"])
 
 @router.get("/get_variables", response_model=Dict[str, Union[List[Dict[str, Union[int, str]]], List[Union[int, float, str]]]])
 def get_variables():
+    """
+    Получение допустимых параметров для фильтрации по авто для покупки
+    """
     return {
          "brand": [
             {"key": 1, "value": "Koenigsegg"},
@@ -82,4 +85,7 @@ def get_cars(
     price_to: float = None,
     limit: int = 12,
 ):
+    """
+    Получение машин для покупки после фильтрации
+    """
     return cars_db[:limit]

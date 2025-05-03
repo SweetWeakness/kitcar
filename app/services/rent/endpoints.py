@@ -8,6 +8,10 @@ router = APIRouter(prefix="/rent", tags=["rent"])
 
 @router.get("/get_variables")
 def get_rental_filter_options():
+    """
+    Получение списка допустимых параметров для фильтрации в блоке
+    "Аренда автомобиля"
+    """
     return {
         "available_types": [
             {"key": 1, "value": "Седан", "amount": 5},
@@ -44,4 +48,7 @@ def get_rental_cars(
         date_to: str = None,
         time_to: str = None,
 ):
+    """
+    Получение списка машин с заданными фильтрами с пагинацией
+    """
     return cars_db[:limit]

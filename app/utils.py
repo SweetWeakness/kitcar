@@ -127,3 +127,27 @@ cars_db = [
     },
 ]
 
+
+offers_db = [
+    {
+        "id": 1, "name": "test", "price": 1337, "liked": False
+    },
+    {
+        "id": 2, "name": "test2", "price": 137, "liked": True
+    },
+    {
+        "id": 3, "name": "test3", "price": 17, "liked": False
+    },
+]
+
+replies_db = [
+    {
+        "id": 1,
+        "username": "Алекс Стейн",
+        "cartype": "Hyundai",
+        "date":"21-07-2022",
+        "rating": 4,
+        "image_url": "/images/peugeot_3008.png",
+        "text": "asd\nasda\nasda\nasd\nas\nd\na\sndasdas\ndan\sd\nsndas\ndnndsansd\nsd\nsd"
+    }
+]
