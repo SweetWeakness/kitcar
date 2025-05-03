@@ -105,9 +105,10 @@ def get_rental_cars(
             if not flg:
                 continue
 
-        row["price"] /= 1000
-        if row["old_price"]:
-            row["old_price"] /= 1000
-        filtered_cars.append(row)
+        new_row = row.copy()
+
+        if new_row["old_price"]:
+            new_row["old_price"] /= 1000
+        filtered_cars.append(new_row)
 
     return add_dict_values(filtered_cars[:limit])
