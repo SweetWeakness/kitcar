@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 from typing import List, Optional, Dict, Union
 
-from app.utils import cars_db
+from app.utils import cars_db, cars_db_sell, add_dict_values
 
 router = APIRouter(prefix="/rent", tags=["rent"])
 
@@ -14,8 +14,8 @@ def get_rental_filter_options():
     """
     return {
         "available_types": [
-            {"key": 1, "value": "Седан", "amount": 5},
-            {"key": 2, "value": "Грузовик", "amount": 15}
+            {"key": 1, "value": "Sedan", "amount": 5},
+            {"key": 2, "value": "Coupe", "amount": 15}
         ],
         "available_capacity": [
             {"key": 1, "value": "2 человека", "amount": 25},
@@ -41,6 +41,9 @@ def get_rental_cars(
         car_type: str = None,
         capacity: str = None,
         additional_params: str = None,
+
+        # для потенциальной сортировки
+        price_to: int = None,
         place_from: int = None,
         date_from: str = None,
         time_from: str = None,
@@ -51,4 +54,60 @@ def get_rental_cars(
     """
     Получение списка машин с заданными фильтрами с пагинацией
     """
-    return cars_db[:limit]
+    filtered_cars = []
+    for row in cars_db_sell:
+        if additional_params:
+            required = additional_params.split(",")
+            flg = True
+            for req in required:
+                if req == "1":
+                    if row["brand_id"] == 1:
+                        flg = False
+                elif req == "2":
+                    if row["model_id"] != 2:
+                        flg = False
+                elif req == "3":
+                    if row["model_id"] == 3:
+                        flg = False
+            if not flg:
+                continue
+
+        if capacity:
+            row_seats = int(row["seats"][0])
+            required = capacity.split(",")
+            flg = False
+            for req in required:
+                if req == "1":
+                    if row_seats == 2:
+                        flg = True
+                elif req == "2":
+                    if row_seats == 4:
+                        flg = True
+                elif req == "3":
+                    if row_seats == 6:
+                        flg = True
+                elif req == "4":
+                    if row_seats >= 8:
+                        flg = True
+            if not flg:
+                continue
+
+        if car_type:
+            required = car_type.split(",")
+            flg = False
+            for req in required:
+                if req == "1":
+                    if row["body_id"] == 1:
+                        flg = True
+                elif req == "2":
+                    if row["body_id"] == 2:
+                        flg = True
+            if not flg:
+                continue
+
+        row["price"] /= 1000
+        if row["old_price"]:
+            row["old_price"] /= 1000
+        filtered_cars.append(row)
+
+    return add_dict_values(filtered_cars[:limit])
