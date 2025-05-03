@@ -145,31 +145,31 @@ def add_dict_values(d: list[dict]):
 
 
 ########### БД С ШИНАМИ
-brands = ["Torgo", "Michelin", "Pirelli", "Bridgestone", "Nokian"]
-models = ["MP47", "Energy Saver", "Ice Zero", "Turanza", "Nordman"]
-seasons = ["лето", "зима", "всесезон"]
-sizes = ["R14 175/65", "R15 185/65", "R16 195/60", "R17 205/55", "R18 225/45"]
-load_indexes = ["88T", "91H", "95V", "98W"]
+tire_brands = ["Torgo", "Michelin", "Pirelli", "Bridgestone", "Nokian"]
+tire_models = ["MP47", "Energy Saver", "Ice Zero", "Turanza", "Nordman"]
+tire_seasons = ["лето", "зима", "всесезон"]
+tire_sizes = ["R14 175/65", "R15 185/65", "R16 195/60", "R17 205/55", "R18 225/45"]
+tire_load_indexes = ["88T", "91H", "95V", "98W"]
 
 tires_bd = []
 
 for i in range(1, 101):
-    brand = random.choice(brands)
-    model = random.choice(models)
-    size = random.choice(sizes)
-    index = random.choice(load_indexes)
-    season = random.choice(seasons)
-    name = f"Шина {size} {brand} {model} {index} {season}"
-    price = random.randint(1000, 8000)
-    is_liked = random.choice([True, False])
+    tire_brand = random.choice(tire_brands)
+    tire_model = random.choice(tire_models)
+    tire_size = random.choice(tire_sizes)
+    tire_index = random.choice(tire_load_indexes)
+    tire_season = random.choice(tire_seasons)
+    tire_name = f"Шина {tire_size} {tire_brand} {tire_model} {tire_index} {tire_season}"
+    tire_price = random.randint(1000, 8000)
+    tire_is_liked = random.choice([True, False])
     var1 = random.choice([1, 2, 3])
     var2 = random.choice([1, 2, 3])
 
     tires_bd.append({
         "image_url": "/parts/1.jpg",
-        "name": name,
-        "price": price,
-        "is_liked": is_liked,
+        "name": tire_name,
+        "price": tire_price,
+        "is_liked": tire_is_liked,
         "var1": var1,
         "var2": var2
     })
@@ -178,7 +178,7 @@ for i in range(1, 101):
 #######
 offers_bd = []
 
-names = [
+offers_names = [
     "Фильтр масляный HYUNDAI/KIA 26300–35505",
     "Фильтр масляный TOYOTA 90915-YZZE2",
     "Фильтр масляный NISSAN 15208-65F0A",
@@ -188,7 +188,7 @@ names = [
     "Фильтр масляный RENAULT 7700274177"
 ]
 
-for i, name in enumerate(names, start=1):
+for i, name in enumerate(offers_names, start=1):
     offers_bd.append({
         "image_url": "/parts/2.jpg",
         "id": i,
