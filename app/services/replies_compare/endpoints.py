@@ -40,9 +40,9 @@ def get_rental_filter_options(new_reply: CreateReply):
     """
     new_reply_d = new_reply.model_dump()
 
-    new_reply_d["date"] = datetime.date.today()
+    new_reply_d["date"] = datetime.date.today().strftime("%d-%m-%Y")
     new_reply_d["id"] = 1
-    new_reply_d["image_url"] = "/images/peugeot_3008.png"
+    new_reply_d["image_url"] = "/avatars/user1.png"
     if "email" in new_reply_d:
         del new_reply_d["email"]
 

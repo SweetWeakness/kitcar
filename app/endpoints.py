@@ -8,6 +8,7 @@ from app.services.credit_leasing.endpoints import router as credit_router
 from app.services.rent.endpoints import router as rent_router
 from app.services.parts.endpoints import router as parts_router
 from app.services.replies_compare.endpoints import router as replies_router
+from app.services.images.endpoints import router as images_router
 
 
 main_router = APIRouter()
@@ -19,6 +20,7 @@ main_router.include_router(credit_router)
 main_router.include_router(rent_router)
 main_router.include_router(parts_router)
 main_router.include_router(replies_router)
+main_router.include_router(images_router)
 
 
 tags_metadata = [

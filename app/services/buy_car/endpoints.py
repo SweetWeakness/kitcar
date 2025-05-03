@@ -2,62 +2,27 @@ from fastapi import APIRouter
 from typing import List, Dict, Union
 
 from app.services.buy_car.schemas.filter_cars import Car
-from app.utils import cars_db
+from app.utils import (cars_db_sell, brands, models,
+                       bodies, transmissions, engines,
+                       drives, generations)
 
 
 router = APIRouter(prefix="/buy_car", tags=["buy_car"])
 
 
-@router.get("/get_variables", response_model=Dict[str, Union[List[Dict[str, Union[int, str]]], List[Union[int, float, str]]]])
+@router.get("/get_variables")
 def get_variables():
     """
     Получение допустимых параметров для фильтрации по авто для покупки
     """
     return {
-         "brand": [
-            {"key": 1, "value": "Koenigsegg"},
-            {"key": 2, "value": "Nissan"},
-            {"key": 3, "value": "Rolls-Royce"},
-            {"key": 4, "value": "Toyota"},
-            {"key": 5, "value": "BMW"},
-            {"key": 6, "value": "Audi"},
-            {"key": 7, "value": "Tesla"},
-        ],
-        "model": [
-            {"key": 1, "value": "GT-R"},
-            {"key": 2, "value": "Phantom"},
-            {"key": 3, "value": "Corolla"},
-            {"key": 4, "value": "X5"},
-            {"key": 5, "value": "A4"},
-            {"key": 6, "value": "Model S"},
-        ],
-        "generation": ["2020+", "2015–2019", "2010–2014", "Before 2010"],
-        "body": [
-            {"key": 1, "value": "Sedan"},
-            {"key": 2, "value": "SUV"},
-            {"key": 3, "value": "Coupe"},
-            {"key": 4, "value": "Hatchback"},
-            {"key": 5, "value": "Liftback"},
-            {"key": 6, "value": "Crossover"},
-            {"key": 7, "value": "Sport"},
-            {"key": 8, "value": "Electric"},
-            {"key": 9, "value": "Hybrid"},
-        ],
-        "transmission": [
-            {"key": 1, "value": "Manual"},
-            {"key": 2, "value": "Automatic"},
-        ],
-        "engine": [
-            {"key": 1, "value": "Petrol"},
-            {"key": 2, "value": "Diesel"},
-            {"key": 3, "value": "Hybrid"},
-            {"key": 4, "value": "Electric"},
-        ],
-        "drive": [
-            {"key": 1, "value": "Front-Wheel Drive"},
-            {"key": 2, "value": "Rear-Wheel Drive"},
-            {"key": 3, "value": "All-Wheel Drive"},
-        ],
+        "brand": [{"key": key, "value": val} for key, val in brands.items()],
+        "model": [{"key": key, "value": val} for key, val in models.items()],
+        "generation": generations,
+        "body": [{"key": key, "value": val} for key, val in bodies.items()],
+        "transmission": [{"key": key, "value": val} for key, val in transmissions.items()],
+        "engine": [{"key": key, "value": val} for key, val in engines.items()],
+        "drive": [{"key": key, "value": val} for key, val in drives.items()],
         "volume_from": [1.0, 1.2, 1.5, 2.0, 3.0],
         "volume_to": [2.0, 2.5, 3.5, 5.0, 6.0],
         "year_from": list(range(2000, 2025)),
@@ -66,7 +31,7 @@ def get_variables():
 # todo выше нужно понять че делать с generation - Шо за поколение авто, как хранить че имели ввиду под ним крч
 
 
-@router.get("/get_cars", response_model=List[Car])
+@router.get("/get_cars")
 def get_cars(
     brand: int = None,
     model: int = None,
@@ -88,4 +53,38 @@ def get_cars(
     """
     Получение машин для покупки после фильтрации
     """
-    return cars_db[:limit]
+    filtered_cars = []
+    for row in cars_db_sell:
+        for param_name, param_value in {
+            "brand_id": brand,
+            "model_id": model,
+            "body_id": body,
+            "transmission_id": transmission,
+            "engine_id": engine,
+            "drive_id": drive,
+            "generation": generation
+        }.items():
+            if param_value:
+                if row[param_name] != param_value:
+                    continue
+
+        if volume_from is not None and row["volume"] < volume_from:
+            continue
+        if volume_to is not None and row["volume"] > volume_to:
+            continue
+        if year_from is not None and row["year"] < year_from:
+            continue
+        if year_to is not None and row["year"] > year_to:
+            continue
+        if mileage_from is not None and row["mileage"] < mileage_from:
+            continue
+        if mileage_to is not None and row["mileage"] > mileage_to:
+            continue
+        if price_from is not None and row["price"] < price_from:
+            continue
+        if price_to is not None and row["price"] > price_to:
+            continue
+
+        filtered_cars.append(row)
+
+    return filtered_cars[:limit]

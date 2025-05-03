@@ -14,4 +14,11 @@ def calculate_payment(amount: int, period: int, bank: int):
     """
     Вычисление ежемесячного платежа
     """
-    return {"payment": 177.32}
+    payment = amount / 12 / period
+    if bank == 1:
+        payment *= 0.7
+    elif bank == 2:
+        payment *= 0.8
+    elif bank == 3:
+        payment *= 0.9
+    return {"payment": round(payment)}
