@@ -3,7 +3,7 @@ from typing import List, Optional, Dict, Union
 from pydantic import BaseModel
 import datetime
 
-from app.utils import replies_db
+from app.utils import replies_db, cars_db_sell, add_dict_values
 
 
 class CreateReply(BaseModel):
@@ -36,6 +36,14 @@ def get_rental_filter_options():
             "key": i, "value": "Model #" + str(i)
         })
     return ans
+
+
+@router.get("/get_model_spec")
+def get_rental_filter_options(key: int):
+    """
+    Получение деталей по авто для сравнения с другими
+    """
+    return add_dict_values([cars_db_sell[key * 7]])[0]
 
 
 @router.post("/create_reply")
