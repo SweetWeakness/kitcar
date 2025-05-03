@@ -4,7 +4,7 @@ from typing import List, Dict, Union
 from app.services.buy_car.schemas.filter_cars import Car
 from app.utils import (cars_db_sell, brands, models,
                        bodies, transmissions, engines,
-                       drives, generations)
+                       drives, generations, add_dict_values)
 
 
 router = APIRouter(prefix="/buy_car", tags=["buy_car"])
@@ -55,18 +55,20 @@ def get_cars(
     """
     filtered_cars = []
     for row in cars_db_sell:
-        for param_name, param_value in {
-            "brand_id": brand,
-            "model_id": model,
-            "body_id": body,
-            "transmission_id": transmission,
-            "engine_id": engine,
-            "drive_id": drive,
-            "generation": generation
-        }.items():
-            if param_value:
-                if row[param_name] != param_value:
-                    continue
+        if brand is not None and row["brand_id"] != brand:
+            continue
+        if model is not None and row["model_id"] != model:
+            continue
+        if generation is not None and row["generation"] != generation:
+            continue
+        if body is not None and row["body_id"] != body:
+            continue
+        if transmission is not None and row["transmission_id"] != transmission:
+            continue
+        if engine is not None and row["engine_id"] != engine:
+            continue
+        if drive is not None and row["drive_id"] != drive:
+            continue
 
         if volume_from is not None and row["volume"] < volume_from:
             continue
@@ -87,4 +89,4 @@ def get_cars(
 
         filtered_cars.append(row)
 
-    return filtered_cars[:limit]
+    return add_dict_values(filtered_cars[:limit])

@@ -188,7 +188,7 @@ replies_db = [
     }
 ]
 
-
+######## БД ДЛЯ ПОКУПКИ И АРЕНДЫ АВТО
 brands = {
     1: "Toyota", 2: "Nissan", 3: "BMW", 4: "Tesla", 5: "Ford",
     6: "Honda", 7: "Hyundai", 8: "Kia", 9: "Chevrolet", 10: "Mazda"
@@ -264,3 +264,20 @@ for i in range(1, 100):
                       if random.random() > 0.5
                       else price + random.randint(20000, 100000))
     })
+
+
+def add_dict_values(d: list[dict]):
+    ans = []
+    for row in d:
+        new_row = {
+                **row,
+                "brand": brands.get(row["brand_id"]),
+                "model": models.get(row["model_id"]),
+                "body": bodies.get(row["body_id"]),
+                "transmission": transmissions.get(row["transmission_id"]),
+                "engine": engines.get(row["engine_id"]),
+                "drive": drives.get(row["drive_id"]),
+            }
+        ans.append(new_row)
+
+    return ans
