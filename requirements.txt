@@ -4,3 +4,4 @@ pydantic-settings
 PyJWT
 passlib
 pydantic
+python-multipart
