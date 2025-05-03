@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 from typing import List, Optional, Dict, Union
 
-from app.utils import cars_db, cars_db_sell, add_dict_values
+from app.utils import cars_db_sell, add_dict_values
 
 router = APIRouter(prefix="/rent", tags=["rent"])
 
