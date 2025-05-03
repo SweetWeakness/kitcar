@@ -8,7 +8,7 @@ from app.utils import cars_db_sell
 router = APIRouter(prefix="/main_page", tags=["main_page"])
 
 
-@router.get("/superoffers", response_model=List[CarOffer])
+@router.get("/superoffers")
 def get_super_offers(limit: int = 4):
     """
     Получение суперпредложений с пагинацией по limit

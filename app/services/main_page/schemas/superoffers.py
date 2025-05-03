@@ -7,7 +7,7 @@ class CarOffer(BaseModel):
     name: str
     type: str
     price: str
-    old_price: Optional[str] = None
+    old_price: str | None
     image_url: str
     transmission: str
     fuel: str

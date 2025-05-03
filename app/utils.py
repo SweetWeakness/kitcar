@@ -241,7 +241,7 @@ drive_ids = [1, 2, 3]
 cars_db_sell = []
 import random
 # Генерация дополнительных записей
-for i in range(4, 101):
+for i in range(1, 100):
     price = random.randint(700000, 5000000)
     cars_db_sell.append({
         "id": i,
