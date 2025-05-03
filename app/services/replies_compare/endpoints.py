@@ -30,7 +30,12 @@ def get_rental_filter_options():
     """
     Получение моделей авто для дальнейших сравнений в блоке "Отзывы и сравнения"
     """
-    return list(map(lambda x: "Model #" + str(x), list(range(15))))
+    ans = []
+    for i in range(1, 7):
+        ans.append({
+            "key": i, "value": "Model #" + str(i)
+        })
+    return ans
 
 
 @router.post("/create_reply")
